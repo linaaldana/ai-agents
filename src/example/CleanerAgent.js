@@ -12,7 +12,7 @@ class CleanerAgent extends Agent {
             "0,0,0,0,0": "UP",
             "0,0,0,1,0": "UP",
             "0,0,1,0,0": "UP",
-            "0,0,1,1,0": "LEFT",
+            "0,0,1,1,0": "UP", // Presentaba el problema
             "0,1,0,0,0": "LEFT",
             "0,1,0,1,0": "RIGHT",
             "0,1,1,0,0": "LEFT",
@@ -34,6 +34,7 @@ class CleanerAgent extends Agent {
      */
     send() {
         let viewKey = this.perception.join();
+        // console.log(this.perception)
         //let action = foo(this.internalState, this.perception)
         //this.internalState = updatex(this.internalState, this.perception, action)
         //return action;

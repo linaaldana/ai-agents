@@ -31,7 +31,7 @@ class Agent {
      * Inform to the Agent controller about the action to perform
      */
     send() {
-        return this.table["deafult"];
+        return this.table["default"];
     }
 
     /**
