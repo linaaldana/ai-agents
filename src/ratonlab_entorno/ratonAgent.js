@@ -11,7 +11,7 @@ class CleanerAgent extends Agent {
         this.table = {
             "0,0,0,0,0": "UP",
             "0,0,0,1,0": "UP",
-            
+
             //
             "0,0,1,0,0": "UP",
             "0,0,1,0,0,0": "DOWN",
@@ -72,11 +72,16 @@ class CleanerAgent extends Agent {
             "1,1,1,0,0": "DOWN",
             "default": "TAKE"
         };
-        // this.lastPerceptions = ',0,0,0,0'
         this.bigNumber = 20;
         this.memory = []
+        this.currentPosition = {}
     }
 
+    /**
+     * 
+     * @param {*} initialValue 
+     * This function update de agent environment by de initial value received
+     */
     setup(initialValue) {
         for (let i = 0; i < this.bigNumber; i++) {
             this.memory.push([])
@@ -88,6 +93,11 @@ class CleanerAgent extends Agent {
         this.currentPosition = { ...initialValue }
     }
 
+    /**
+     * 
+     * @param {*} perception 
+     * This function update agent memory with the perception reveived
+     */
     updateMemory(perception) {
         let left = 0, right = 0, up = 0, down = 0
         if (this.currentPosition.y > 0) {
@@ -104,6 +114,11 @@ class CleanerAgent extends Agent {
         if (this.memory[this.currentPosition.y][right] === 0) this.memory[this.currentPosition.y][right] = perception[2]
     }
 
+    /**
+     * 
+     * @param {*} action 
+     * This function get the netx position in x, y coords on the board for the agent whit the action received
+     */
     getNextPosition(action) {
         let x = this.currentPosition.x, y = this.currentPosition.y
         switch (action) {
@@ -125,6 +140,11 @@ class CleanerAgent extends Agent {
         return { x, y }
     }
 
+    /**
+     * 
+     * @param {*} action 
+     * This function update the agent position on board memory and set de last position with 1
+     */
     updateCurrentPosition(action) {
         this.memory[this.currentPosition.y][this.currentPosition.x] = 1
         this.currentPosition = { ...this.getNextPosition(action) }
@@ -132,6 +152,11 @@ class CleanerAgent extends Agent {
         return action
     }
 
+    /**
+     * 
+     * @param {*} viewKey 
+     * THis function verify if the netx position is a postion not explored by the agent
+     */
     verifyMovement(viewKey) {
         let nextPosition = this.getNextPosition(this.table[viewKey])
         if (this.memory[nextPosition.y][nextPosition.x] === 1) viewKey += ',0'
@@ -144,7 +169,7 @@ class CleanerAgent extends Agent {
      */
     send() {
         this.updateMemory(this.perception)
-        let viewKey = this.perception.join();
+        let viewKey = this.perception.join()
         viewKey = this.verifyMovement(viewKey)
         if (this.table[viewKey]) {
             return this.updateCurrentPosition(this.table[viewKey])
